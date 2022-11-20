@@ -6,13 +6,23 @@ using Microsoft.AspNetCore.TestHost;
 
 namespace XunitContext_338_repro;
 
-public class UnitTest1 : MyTestBase, IClassFixture<WebApplicationFactory<Program>>
+public class UnitTest1 : MyTestBase, IClassFixture<WebApplicationFactory<Program>>, IAsyncLifetime
 {
     private readonly TestServer _server;
 
     public UnitTest1(WebApplicationFactory<Program> factory, ITestOutputHelper output) : base(output)
     {
         _server = factory.Server;
+    }
+
+    public async Task InitializeAsync()
+    {
+        await Task.Delay(Random.Shared.Next(200, 500)).ConfigureAwait(false);
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.Delay(Random.Shared.Next(200, 500)).ConfigureAwait(false);
     }
 
     [Theory]

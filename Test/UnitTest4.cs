@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.TestHost;
 
 namespace XunitContext_338_repro;
 
-public class UnitTest4 : MyTestBase, IClassFixture<WebApplicationFactory<Program>>
+public class UnitTest4 : MyTestBase, IClassFixture<WebApplicationFactory<Program>>, IAsyncLifetime
 {
     private readonly TestServer _server;
 
@@ -31,5 +31,15 @@ public class UnitTest4 : MyTestBase, IClassFixture<WebApplicationFactory<Program
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         }));
         // throw new InvalidOperationException("My exception");
+    }
+
+    public async Task InitializeAsync()
+    {
+        await Task.Delay(Random.Shared.Next(200, 500)).ConfigureAwait(false);
+    }
+
+    public async Task DisposeAsync()
+    {
+        await Task.Delay(Random.Shared.Next(200, 500)).ConfigureAwait(false);
     }
 }
